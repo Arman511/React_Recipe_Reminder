@@ -1,0 +1,140 @@
+[
+    {
+        "id": 1,
+        "title": "Lemon cake",
+        "description": "A delicious lemon cake",
+        "star": 4,
+        "steps": [
+            {
+                "stepNumber": 1,
+                "text": "Preheat your oven to 350°F (175°C)."
+            },
+            {
+                "stepNumber": 2,
+                "text": "In a large mixing bowl, whisk together 2 cups of flour, 1 cup of sugar, and 2 teaspoons of baking powder."
+            },
+            {
+                "stepNumber": 3,
+                "text": "In a separate bowl, whisk together 1/2 cup of freshly squeezed lemon juice, 1/4 cup of vegetable oil, and 2 large eggs."
+            },
+            {
+                "stepNumber": 4,
+                "text": "Add the wet ingredients to the dry ingredients and mix until just combined. Don't overmix!"
+            },
+            {
+                "stepNumber": 5,
+                "text": "Pour the batter into a greased 9x13-inch baking dish."
+            },
+            {
+                "stepNumber": 6,
+                "text": "Bake for 30-35 minutes, or until a toothpick inserted into the center of the cake comes out clean."
+            },
+            {
+                "stepNumber": 7,
+                "text": "Remove from the oven and let cool in the pan for 10 minutes. Then, transfer to a wire rack to cool completely."
+            },
+            {
+                "stepNumber": 8,
+                "text": "Enjoy your delicious lemon cake!"
+            }
+        ],
+        "ingredients": ["flour", "sugar", "eggs", "lemon"],
+        "servings": 8,
+        "prepTime": 30,
+        "cookTime": 60,
+        "creationDate": "2020-01-01",
+        "author": "John Doe"
+    },
+    {
+        "id": 2,
+        "title": "Chocolate cake",
+        "description": "A delicious chocolate cake",
+        "star": 5,
+        "steps": [
+            {
+                "stepNumber": 1,
+                "text": "Preheat your oven to 350°F (175°C)."
+            },
+            {
+                "stepNumber": 2,
+                "text": "In a large mixing bowl, whisk together 2 cups of flour, 1 cup of sugar, and 2 teaspoons of baking powder."
+            },
+            {
+                "stepNumber": 3,
+                "text": "In a separate bowl, whisk together 1/2 cup of unsweetened cocoa powder, 1/4 cup of vegetable oil, and 2 large eggs."
+            },
+            {
+                "stepNumber": 4,
+                "text": "Add the wet ingredients to the dry ingredients and mix until just combined. Don't overmix!"
+            },
+            {
+                "stepNumber": 5,
+                "text": "Pour the batter into a greased 9x13-inch baking dish."
+            },
+            {
+                "stepNumber": 6,
+                "text": "Bake for 30-35 minutes, or until a toothpick inserted into the center of the cake comes out clean."
+            },
+            {
+                "stepNumber": 7,
+                "text": "Remove from the oven and let cool in the pan for 10 minutes. Then, transfer to a wire rack to cool completely."
+            },
+            {
+                "stepNumber": 8,
+                "text": "Enjoy your delicious chocolate cake!"
+            }
+        ],
+        "ingredients": ["flour", "sugar", "eggs", "chocolate"],
+        "servings": 8,
+        "prepTime": 30,
+        "cookTime": 60,
+        "creationDate": "2020-01-01",
+        "author": "John Doe"
+    },
+    {
+        "id": 3,
+        "title": "Carrot cake",
+        "description": "A delicious carrot cake",
+        "star": 4,
+        "steps": [
+            {
+                "stepNumber": 1,
+                "text": "Preheat your oven to 350°F (175°C)."
+            },
+            {
+                "stepNumber": 2,
+                "text": "In a large mixing bowl, whisk together 2 cups of flour, 1 cup of sugar, and 2 teaspoons of baking powder."
+            },
+            {
+                "stepNumber": 3,
+                "text": "In a separate bowl, whisk together 1/2 cup of grated carrots, 1/4 cup of chopped walnuts, and 2 large eggs."
+            },
+            {
+                "stepNumber": 4,
+                "text": "Add the wet ingredients to the dry ingredients and mix until just combined. Don't overmix!"
+            },
+            {
+                "stepNumber": 5,
+                "text": "Pour the batter into a greased 9x13-inch baking dish."
+            },
+            {
+                "stepNumber": 6,
+                "text": "Bake for 30-35 minutes, or until a toothpick inserted into the center of the cake comes out clean."
+            },
+            {
+                "stepNumber": 7,
+                "text": "Remove from the oven and let cool in the pan for 10 minutes. Then, transfer to a wire rack to cool completely."
+            },
+            {
+                "stepNumber": 8,
+                "text": "Enjoy your delicious carrot cake!"
+            }
+        ],
+        "ingredients": ["flour", "sugar", "eggs", "carrots", "walnuts"],
+        "servings": 8,
+        "prepTime": 30,
+        "cookTime": 60,
+        "creationDate": "2020-01-01",
+        "author": "John Doe"
+    }
+]
