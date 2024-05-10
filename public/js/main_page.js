@@ -22,10 +22,16 @@ const get_recipes = async () => {
         const stepsList = recipe.steps
             .map((step) => `<li>${step.text}</li>`)
             .join("");
+        const stars_div = document.createElement("div");
+        for (let i = 1; i <= 5; i++) {
+            stars_div.innerHTML += `<span class="fa fa-star ${
+                recipe.star >= i ? "checked" : ""
+            }"></span>`;
+        }
         recipe_div.innerHTML = `
             <h2>${recipe.title}</h2>
             <p>${recipe.description}</p>
-            <p>Stars: ${recipe.star}</p>
+            <p>${stars_div.outerHTML}</p>
             <p>Servings: ${recipe.servings}</p>
             <p>Prep Time: ${recipe.prepTime} minutes</p>
             <p>Cook Time: ${recipe.cookTime} minutes</p>
