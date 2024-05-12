@@ -8,7 +8,7 @@ const get_recipes = async () => {
         const message = document.createElement("div");
         message.className = "error";
         message.innerHTML = `<h2>An error has occurred: ${response.statusText}</h2>`;
-        news_container.appendChild(message);
+        recipe_container.appendChild(message);
         console.error("There was a problem with the fetch operation");
         return;
     }

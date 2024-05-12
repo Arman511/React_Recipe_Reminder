@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -21,7 +20,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
             <div class="container">
-                <a class="navbar-brand" href="index.html">Recipe Reminder</a>
+                <a class="navbar-brand" href="/">Recipe Reminder</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -30,8 +29,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <div class="navbar-nav">
                         <a class="nav-link" href="/">Home</a>
-                        <a class="nav-link active" href="user_recipes.html">User's</a>
-
+                        <a class="nav-link" href="user_recipes">User's</a>
+                        <a class="nav-link" href="add_recipe">Add recipe</a>
+                        <a class="nav-link active" href="account_create">Create account</a>
 
                     </div>
                 </div>
@@ -42,22 +42,35 @@
     <main>
         <div class="container my_container">
             <h1 class="title">Welcome to Recipe Reminder</h1>
-            <form>
-                <label for="select_author">Select author:</label>
-                <select id="select_author">
-                </select>
-                <button type="button" id="btn_select_author" class="btn btn-primary">Select</button>
-            </form>
-            <hr>
             <br>
-            <div id="recipe_box"> </div>
+            <div id="form">
+                <form>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Your name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">Confirm password</label>
+                        <input type="password" class="form-control" id="password2" name="password2" required>
+                    </div>
+                    <button type="button" id="btn_create_account" class="btn btn-primary">Create account</button>
+                </form>
+            </div>
         </div>
     </main>
     <!--Footer-->
     <footer>
     </footer>
     <script src="https://kit.fontawesome.com/936bacb652.js" crossorigin="anonymous"></script>
-    <script src="js/users_page.js"></script>
+    <script src="js/accCreation_page.js"></script>
 </body>
 
 </html>

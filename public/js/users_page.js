@@ -1,36 +1,43 @@
 var recipe_data = "";
 
-function hash(string) {
-    const utf8 = new TextEncoder().encode(string);
-    return crypto.subtle.digest("SHA-256", utf8).then((hashBuffer) => {
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray
-            .map((bytes) => bytes.toString(16).padStart(2, "0"))
-            .join("");
-        return hashHex;
-    });
-}
 const recipe_container = document.getElementById("recipe_box");
-const email = prompt("Enter email");
-const pass = hash(prompt("Enter password"));
-console.log(pass);
-const get_recipes = async () => {
+const authors_select_box = document.getElementById("select_author");
+
+const fill_author_box = async () => {
+    const response = await fetch("/api/authors");
+    if (!response.ok) {
+        const message = document.createElement("div");
+        message.className = "error";
+        message.innerHTML = `<h2>An error has occurred: ${response.statusText}</h2>`;
+        recipe_container.appendChild(message);
+        console.error("There was a problem with the fetch operation");
+        return;
+    }
+
+    const data = await response.json();
+    const authors = data
+        .map((author) => `<option value="${author.id}">${author.name}</option>`)
+        .join("");
+    authors_select_box.innerHTML = authors;
+};
+
+const select_button = document.getElementById("btn_select_author");
+
+select_button.addEventListener("click", async () => {
+    const author_id = authors_select_box.value;
     const response = await fetch("/api/user_specific", {
         method: "POST",
-        body: JSON.stringify({
-            email: email,
-            pass: pass,
-        }),
         headers: {
-            "Content-type": "application/json; charset=UTF-8",
+            "Content-Type": "application/json",
         },
+        body: JSON.stringify({ authorID: author_id }),
     });
 
     if (!response.ok) {
         const message = document.createElement("div");
         message.className = "error";
         message.innerHTML = `<h2>An error has occurred: ${response.statusText}</h2>`;
-        news_container.appendChild(message);
+        recipe_container.appendChild(message);
         console.error("There was a problem with the fetch operation");
         return;
     }
@@ -44,10 +51,16 @@ const get_recipes = async () => {
         const stepsList = recipe.steps
             .map((step) => `<li>${step.text}</li>`)
             .join("");
+        const stars_div = document.createElement("div");
+        for (let i = 1; i <= 5; i++) {
+            stars_div.innerHTML += `<span class="fa fa-star ${
+                recipe.star >= i ? "checked" : ""
+            }"></span>`;
+        }
         recipe_div.innerHTML = `
             <h2>${recipe.title}</h2>
             <p>${recipe.description}</p>
-            <p>Stars: ${recipe.star}</p>
+            <p>${stars_div.outerHTML}</p>
             <p>Servings: ${recipe.servings}</p>
             <p>Prep Time: ${recipe.prepTime} minutes</p>
             <p>Cook Time: ${recipe.cookTime} minutes</p>
@@ -58,6 +71,6 @@ const get_recipes = async () => {
         content.push(recipe_div.outerHTML);
     });
     recipe_container.innerHTML = content.join("<hr>");
-};
+});
 
-get_recipes();
+fill_author_box();
