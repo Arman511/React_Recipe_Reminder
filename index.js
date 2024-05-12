@@ -167,3 +167,91 @@ app.get("/api/authors", async (_, res) => {
             .json({ error: "Internal Server Error, Try again later" });
     }
 });
+
+app.post("/api/create_recipe", async (req, res) => {
+    const {
+        title,
+        description,
+        servings,
+        prep_time,
+        cook_time,
+        stars,
+        ingredients,
+        steps,
+        email,
+        password,
+    } = req.body;
+    if (
+        !title ||
+        !description ||
+        !servings ||
+        !prep_time ||
+        !cook_time ||
+        !stars ||
+        !ingredients ||
+        !steps ||
+        !email ||
+        !password
+    ) {
+        return res.status(400).json({ error: "Missing required fields" });
+    }
+    try {
+        const response_authors = await get_authors();
+        if (response_authors.error) {
+            return res.status(500).json({ error: response_authors.error });
+        }
+        const authors = response_authors.users;
+        const author = authors.find((author) => author.email === email);
+        if (!author) {
+            return res
+                .status(400)
+                .json({ error: "Author not found/Invalid password" });
+        }
+        if (author.pass !== password) {
+            return res
+                .status(400)
+                .json({ error: "Author not found/Invalid password" });
+        }
+        const response_recipes = await get_recipes();
+        if (response_recipes.error) {
+            return res.status(500).json({ error: response_recipes.error });
+        }
+        const recipes = response_recipes.recipes;
+        const newRecipe = {
+            id: response_recipes.latestID + 1,
+            title: title,
+            description: description,
+            servings: servings,
+            prep_time: prep_time,
+            cook_time: cook_time,
+            stars: stars,
+            ingredients: ingredients,
+            steps: steps,
+            authorID: author.id,
+        };
+        recipes.push(newRecipe);
+        const putJSON = {
+            latestID: response.latestID + 1,
+            recipes: recipes,
+        };
+        const putResponse = await axios.put(
+            "https://api.jsonbin.io/v3/b/663e866de41b4d34e4f1c7ab",
+            putJSON,
+            {
+                headers: {
+                    "X-Access-Key": process.env.JSON_BIN_KEY,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        if (putResponse.error) {
+            return res.status(500).json({ error: putResponse.error });
+        }
+        res.json({ message: "Recipe created successfully" });
+    } catch (error) {
+        console.error("There was a problem with the fetch operation:", error);
+        return res
+            .status(500)
+            .json({ error: "Internal Server Error, Try again later" });
+    }
+});
