@@ -37,7 +37,7 @@ const get_recipes = async () => {
         }
         last_recipe_check.date = new Date();
         last_recipe_check.response = response.data.record;
-        return response;
+        return response.data.record;
     } catch (error) {
         console.error("There was a problem with the fetch operation:", error);
         return { error: "Internal Server Error, Try again later" };
@@ -87,6 +87,9 @@ app.post("/api/create_account", async (req, res) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
         return res.status(400).json({ error: "Missing required fields" });
+    }
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+        return res.status(400).json({ error: "Invalid email format" });
     }
     if (password.length < 8) {
         return res
@@ -173,9 +176,9 @@ app.post("/api/create_recipe", async (req, res) => {
         title,
         description,
         servings,
-        prep_time,
-        cook_time,
-        stars,
+        prepTime,
+        cookTime,
+        star,
         ingredients,
         steps,
         email,
@@ -185,9 +188,9 @@ app.post("/api/create_recipe", async (req, res) => {
         !title ||
         !description ||
         !servings ||
-        !prep_time ||
-        !cook_time ||
-        !stars ||
+        !prepTime ||
+        !cookTime ||
+        !star ||
         !ingredients ||
         !steps ||
         !email ||
@@ -195,6 +198,25 @@ app.post("/api/create_recipe", async (req, res) => {
     ) {
         return res.status(400).json({ error: "Missing required fields" });
     }
+    if (steps.length === 0 || ingredients.length === 0) {
+        return res.status(400).json({
+            error: "You need to add at least one ingredient and one step",
+        });
+    }
+    if (
+        isNaN(servings) ||
+        isNaN(prepTime) ||
+        isNaN(cookTime) ||
+        isNaN(star) ||
+        star > 5 ||
+        star < 0
+    ) {
+        return res.status(400).json({ error: "Invalid input" });
+    }
+    const stepsFormatter = steps.map((step) => ({
+        stepNumber: steps.indexOf(step) + 1,
+        text: step,
+    }));
     try {
         const response_authors = await get_authors();
         if (response_authors.error) {
@@ -221,17 +243,19 @@ app.post("/api/create_recipe", async (req, res) => {
             id: response_recipes.latestID + 1,
             title: title,
             description: description,
-            servings: servings,
-            prep_time: prep_time,
-            cook_time: cook_time,
-            stars: stars,
+            star: star,
+            steps: stepsFormatter,
             ingredients: ingredients,
-            steps: steps,
+            servings: servings,
+            prep_time: prepTime,
+            cookTime: cookTime,
+            creationDate: new Date().toISOString(),
+            author: author.name,
             authorID: author.id,
         };
         recipes.push(newRecipe);
         const putJSON = {
-            latestID: response.latestID + 1,
+            latestID: response_recipes.latestID + 1,
             recipes: recipes,
         };
         const putResponse = await axios.put(
@@ -247,6 +271,7 @@ app.post("/api/create_recipe", async (req, res) => {
         if (putResponse.error) {
             return res.status(500).json({ error: putResponse.error });
         }
+        last_recipe_check.response = putJSON;
         res.json({ message: "Recipe created successfully" });
     } catch (error) {
         console.error("There was a problem with the fetch operation:", error);

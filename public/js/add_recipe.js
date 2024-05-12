@@ -61,22 +61,25 @@ document.getElementById("btn_remove_step").addEventListener("click", () => {
 });
 
 document.getElementById("btn_submit").addEventListener("click", async () => {
-    const title = document.getElementById("recipe_title").value;
+    const title = document.getElementById("recipe_name").value;
     const description = document.getElementById("recipe_description").value;
     const servings = document.getElementById("servings").value;
-    const prep_time = document.getElementById("prep_time").value;
-    const cook_time = document.getElementById("cook_time").value;
-    const stars = document.getElementById("stars").value;
+    const prepTime = Number(document.getElementById("prep_time").value);
+    const cookTime = Number(document.getElementById("cook_time").value);
+    const star = Number(document.getElementById("stars").value);
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-
+    if (steps.length === 0 || ingredients.length === 0) {
+        alert("You need to add at least one ingredient and one step");
+        return;
+    }
     if (
         title === "" ||
         description === "" ||
-        servings === "" ||
-        prep_time === "" ||
-        cook_time === "" ||
-        stars === "" ||
+        isNaN(servings) ||
+        isNaN(prepTime) ||
+        isNaN(cookTime) ||
+        isNaN(star) ||
         email === "" ||
         password === ""
     ) {
@@ -98,9 +101,9 @@ document.getElementById("btn_submit").addEventListener("click", async () => {
             title: title,
             description: description,
             servings: servings,
-            prep_time: prep_time,
-            cook_time: cook_time,
-            stars: stars,
+            prepTime: prepTime,
+            cookTime: cookTime,
+            stars: star,
             ingredients: ingredients,
             steps: steps,
             email: email,
