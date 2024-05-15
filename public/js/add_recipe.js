@@ -21,7 +21,7 @@ document.getElementById("btn_add_ingredient").addEventListener("click", () => {
         alert("Ingredient is required");
         return;
     }
-    ingredients.push(`${ingredient} ${ingredient_amount}`);
+    ingredients.push(`${ingredient} - ${ingredient_amount}`);
     document.getElementById("ingredient_name").value = "";
     document.getElementById("ingredient_amount").value = "";
     ingredient_list.innerHTML =
