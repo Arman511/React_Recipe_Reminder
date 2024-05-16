@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -21,7 +20,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
             <div class="container">
-                <a class="navbar-brand" href="index.html">Recipe Reminder</a>
+                <a class="navbar-brand" href="/">Recipe Reminder</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -31,12 +30,11 @@
                     <div class="navbar-nav">
                         <a class="nav-link active" href="/">Home</a>
                         <a class="nav-link" href="recipes">Search</a>
-                        <a class="nav-link active" href="user_recipes">User's</a>
+                        <a class="nav-link" href="user_recipes">User's</a>
                         <a class="nav-link" href="add_recipe">Add recipe</a>
                         <a class="nav-link " href="edit_recipe">Edit recipe</a>
                         <a class="nav-link " href="edit_profile">Edit Profile</a>
                         <a class="nav-link " href="create_account">Create account</a>
-
                     </div>
                 </div>
             </div>
@@ -46,22 +44,26 @@
     <main>
         <div class="container my_container">
             <h1 class="title">Welcome to Recipe Reminder</h1>
-            <form>
-                <label for="select_author">Select author:</label>
-                <select id="select_author">
-                </select>
-                <button type="button" id="btn_select_author" class="btn btn-primary">Select</button>
-            </form>
-            <hr>
             <br>
-            <div id="recipe_box"> </div>
+            <div>
+                <form>
+                    <label for="search_bar">Search bar:</label>
+                    <input type="text" id="search_bar" name="search_bar" required>
+                </form>
+                <hr>
+                <br>
+            </div>
+            <div id="recipe_box">
+
+
+            </div>
         </div>
     </main>
     <!--Footer-->
     <footer>
     </footer>
     <script src="https://kit.fontawesome.com/936bacb652.js" crossorigin="anonymous"></script>
-    <script src="js/users_page.js"></script>
+    <script src="js/recipes.js"></script>
 </body>
 
 </html>

@@ -3,9 +3,12 @@ const password = document.getElementById("password");
 const btn_sign_in = document.getElementById("btn_sign_in");
 const recipe_box = document.getElementById("recipe_box");
 const sign_in = document.getElementById("sign_in");
+
 const form_select_recipe = document.getElementById("form_select_recipe");
+const select_recipe = document.getElementById("select_recipe");
 const btn_select_recipe = document.getElementById("btn_select_recipe");
 
+const update_recipe_form = document.getElementById("update_recipe_form");
 const recipe_title = document.getElementById("recipe_name");
 
 const ingredient_name = document.getElementById("ingredient_name");
@@ -26,13 +29,17 @@ const servings = document.getElementById("servings");
 const prep_time = document.getElementById("prep_time");
 const cook_time = document.getElementById("cook_time");
 
-const update_recipe_form = document.getElementById("update_recipe_form");
-const delete_recipe_form = document.getElementById("delete_recipe_form");
+const btn_update_recipe_form = document.getElementById(
+    "btn_update_recipe_form"
+);
+const btn_delete_recipe_form = document.getElementById(
+    "btn_delete_recipe_form"
+);
 
 const ingredients = [];
 const steps = [];
 
-const id = -1;
+let id = -1;
 
 const btn_submit = document.getElementById("btn_submit");
 
@@ -79,19 +86,18 @@ btn_sign_in.addEventListener("click", async () => {
         alert("You have no recipes");
         return;
     }
-    recipe_box.innerHTML = "";
-    const recipe_input = document.createElement("select");
-    data.forEach((recipe) => {
-        const recipe_options = document.createElement("option");
-        recipe_options.value = recipe.id;
-        recipe_options.innerText = recipe.title;
-        recipe_input.appendChild(recipe_options);
+    let options = [];
+    data.map((recipe) => {
+        const recipe_options = `<option value="${recipe.id}">${recipe.title}</option>`;
+        options.push(recipe_options);
     });
-    form_select_recipe.appendChild(recipe_input);
+    select_recipe.innerHTML = options.join("") + select_recipe.innerHTML;
     recipe_box.style.display = "block";
+    sign_in.style.display = "none";
 });
 
 btn_select_recipe.addEventListener("click", async () => {
+    console.log("Select recipe");
     const recipe_id = form_select_recipe.querySelector("select").value;
     const response = await fetch("/api/recipe", {
         method: "POST",
@@ -112,30 +118,43 @@ btn_select_recipe.addEventListener("click", async () => {
 
     recipe_title.value = data.title;
     ingredient_list.innerHTML = "";
+    ingredients.splice(0, ingredients.length);
     const ingredient_list_new = document.createElement("ul");
     data.ingredients.forEach((ingredient) => {
         const ingredient_item = document.createElement("li");
         ingredient_item.innerText = `${ingredient}`;
         ingredient_list_new.appendChild(ingredient_item);
+        ingredients.push(ingredient);
     });
     ingredient_list.appendChild(ingredient_list_new);
-    ingredients = data.ingredients;
 
     step_list.innerHTML = "";
     const step_list_new = document.createElement("ol");
+    steps.splice(0, steps.length);
     data.steps.forEach((step) => {
         const step_item = document.createElement("li");
-        step_item.innerText = `${step}`;
+        step_item.innerText = `${step.text}`;
         step_list_new.appendChild(step_item);
+        steps.push(step.text);
     });
     step_list.appendChild(step_list_new);
-    steps = data.steps;
 
     recipe_description.value = data.description;
+
+    let servings_value = String(data.servings);
+
+    servings_value = Number(servings_value.replace(/\D/g, ""));
+    servings.value = servings_value;
     star.value = data.star;
-    servings.value = data.servings;
-    prep_time.value = data.prep_time;
-    cook_time.value = data.cook_time;
+    let prep_time_value = String(data.prepTime);
+    let cook_time_value = String(data.cookTime);
+
+    prep_time_value = Number(prep_time_value.replace(/\D/g, ""));
+    cook_time_value = Number(cook_time_value.replace(/\D/g, ""));
+
+    prep_time.value = prep_time_value;
+    cook_time.value = cook_time_value;
+
     id = data.id;
 
     sign_in.style.display = "none";
@@ -195,7 +214,7 @@ btn_remove_step.addEventListener("click", () => {
         "<ul>" + steps.map((step) => `<li>${step}</li>`).join("") + "</ul>";
 });
 
-btn_submit.addEventListener("click", async () => {
+btn_update_recipe_form.addEventListener("click", async () => {
     if (steps.length === 0 || ingredients.length === 0) {
         alert("At least one ingredient and step are required");
         return;
@@ -250,10 +269,10 @@ btn_submit.addEventListener("click", async () => {
     console.log(data);
 
     alert("Recipe updated successfully");
-    window.location.reload();
+    window.location.href = `/recipe/${id}`;
 });
 
-delete_recipe_form.addEventListener("submit", async (e) => {
+btn_delete_recipe_form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const response = await fetch("/api/recipe_delete", {
         method: "POST",

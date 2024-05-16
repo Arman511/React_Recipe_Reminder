@@ -1,8 +1,11 @@
 const express = require("express");
 const axios = require("axios");
 const dotenv = require("dotenv");
-dotenv.config();
+const fs = require("fs");
+const path = require("path");
+
 // App setup
+dotenv.config();
 const PORT = process.env.PORT || 3000;
 const app = express();
 const server = app.listen(PORT, function () {
@@ -14,7 +17,38 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.get("/user_recipes", async (_, res) => {
+    res.sendFile("public/user_recipes.html", { root: __dirname });
+});
+app.get("/create_account", async (_, res) => {
+    res.sendFile("public/account_create.html", { root: __dirname });
+});
+
+app.get("/add_recipe", async (_, res) => {
+    res.sendFile("public/add_recipe.html", { root: __dirname });
+});
+
+app.get("/edit_profile", async (_, res) => {
+    res.sendFile("public/edit_profile.html", { root: __dirname });
+});
+
+app.get("/edit_recipe", async (_, res) => {
+    res.sendFile("public/edit_recipe.html", { root: __dirname });
+});
+
+app.get("/recipes", async (_, res) => {
+    res.sendFile("public/recipes.html", { root: __dirname });
+});
+app.get("/search", async (_, res) => {
+    res.sendFile("public/recipes.html", { root: __dirname });
+});
+
 const last_recipe_check = { date: new Date(), response: null };
+
+const template_page = fs.readFileSync(
+    path.join(__dirname, "template.html"),
+    "utf8"
+);
 
 const get_recipes = async () => {
     if (
@@ -85,27 +119,51 @@ app.get("/api/read_all", async (req, res) => {
     res.json(response.recipes);
 });
 
-app.get("/user_recipes", async (_, res) => {
-    res.sendFile("public/user_recipes.html", { root: __dirname });
-});
-app.get("/create_account", async (_, res) => {
-    res.sendFile("public/account_create.html", { root: __dirname });
-});
+app.get("/recipe/:id", async (req, res) => {
+    const recipeId = req.params.id;
+    // Fetch the recipe with the given id from the database
+    try {
+        const response = await get_recipes();
+        if (response.error) {
+            return res.status(500).json({ error: response.error });
+        }
+        const recipes = response.recipes;
+        const recipe = recipes.find((recipe) => recipe.id === Number(recipeId));
+        if (!recipe) {
+            return res.status(404).json({ error: "Recipe not found" });
+        }
 
-app.get("/add_recipe", async (_, res) => {
-    res.sendFile("public/add_recipe.html", { root: __dirname });
-});
+        const page = template_page;
+        const stepsList = recipe.steps
+            .map((step) => `<li>${step.text}</li>`)
+            .join("");
+        let stars_div = "<div>";
+        for (let i = 1; i <= 5; i++) {
+            stars_div += `<span class="fa fa-star ${
+                recipe.star >= i ? "checked" : ""
+            }"></span>`;
+        }
+        stars_div += "</div>";
+        const recipeHTML = `
+        <h2>${recipe.title}</h2>
+        <p>${recipe.description}</p>
+        <p>${stars_div}</p>
+        <p>Servings: ${recipe.servings}</p>
+        <p>Prep Time: ${recipe.prepTime} minutes</p>
+        <p>Cook Time: ${recipe.cookTime} minutes</p>
+        <p>Ingredients: ${recipe.ingredients.join(", ")}</p>
+        <p>Author: ${recipe.author}</p>
+        <ol>Steps: ${stepsList}</ol>
+        `;
+        const finalPage = page.replace("{{content}}", recipeHTML);
 
-app.get("/edit_profile", async (_, res) => {
-    res.sendFile("public/edit_profile.html", { root: __dirname });
-});
-
-app.get("/edit_recipe", async (_, res) => {
-    res.sendFile("public/edit_recipe.html", { root: __dirname });
-});
-
-app.get("/recipe", async (_, res) => {
-    res.sendFile("public/recipe.html", { root: __dirname });
+        res.send(finalPage);
+    } catch (error) {
+        console.error("There was a problem with the fetch operation:", error);
+        return res
+            .status(500)
+            .json({ error: "Internal Server Error, Try again later" });
+    }
 });
 
 app.post("/api/create_account", async (req, res) => {

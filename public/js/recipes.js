@@ -1,4 +1,20 @@
 const recipe_container = document.getElementById("recipe_box");
+const recipes = [];
+const search_bar = document.getElementById("search_bar");
+
+const populate_box = () => {
+    if (search_bar.value === "") {
+        recipe_container.innerHTML = recipes.join("<hr>");
+    }
+
+    const search = search_bar.value.toLowerCase();
+
+    const filtered = recipes.filter((recipe) => {
+        return recipe.toLowerCase().includes(search);
+    });
+
+    recipe_container.innerHTML = filtered.join("<hr>");
+};
 
 const get_recipes = async () => {
     const response = await fetch("/api/read_all");
@@ -13,7 +29,6 @@ const get_recipes = async () => {
     }
 
     const data = await response.json();
-    var content = [];
 
     data.forEach((recipe) => {
         const recipe_div = document.createElement("div");
@@ -28,19 +43,21 @@ const get_recipes = async () => {
             }"></span>`;
         }
         recipe_div.innerHTML = `
-            <h2>${recipe.title}</h2>
-            <p>${recipe.description}</p>
-            <p>${stars_div.outerHTML}</p>
-            <p>Servings: ${recipe.servings}</p>
-            <p>Prep Time: ${recipe.prepTime} minutes</p>
-            <p>Cook Time: ${recipe.cookTime} minutes</p>
-            <p>Ingredients: ${recipe.ingredients.join(", ")}</p>
-            <p>Author: ${recipe.author}</p>
-            <ol>Steps: ${stepsList}</ol>
+        <h2><a href="/recipe/${recipe.id}">${recipe.title}</a></h2>
+        <p>${recipe.description}</p>
+        <p>${stars_div.outerHTML}</p>
+        <p>Servings: ${recipe.servings}</p>
+        <p>Prep Time: ${recipe.prepTime} minutes</p>
+        <p>Cook Time: ${recipe.cookTime} minutes</p>
+        <p>Ingredients: ${recipe.ingredients.join(", ")}</p>
+        <p>Author: ${recipe.author}</p>
+        <ol>Steps: ${stepsList}</ol>
         `;
-        content.push(recipe_div.outerHTML);
+        recipes.push(recipe_div.outerHTML);
     });
-    recipe_container.innerHTML = content.join("<hr>");
+    populate_box();
 };
 
 get_recipes();
+
+search_bar.addEventListener("input", populate_box);
