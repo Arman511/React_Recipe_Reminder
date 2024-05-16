@@ -376,7 +376,7 @@ app.post("/api/create_recipe", async (req, res) => {
             steps: stepsFormatter,
             ingredients: ingredients,
             servings: servings,
-            prep_time: prepTime,
+            prepTime: prepTime,
             cookTime: cookTime,
             creationDate: new Date().toISOString(),
             author: author.name,
