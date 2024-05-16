@@ -119,10 +119,6 @@ document.getElementById("btn_submit").addEventListener("click", async () => {
     }
 
     const data = await response.json();
-    const message = document.createElement("div");
-    message.className = "success";
-    message.innerHTML = `<h2>${data.message}</h2>`;
-    const box = document.getElementById("form");
-    box.innerHTML = "";
-    box.appendChild(message);
+    alert("Added recipe");
+    window.location.href = `/recipe/${data.id}`;
 });

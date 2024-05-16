@@ -312,6 +312,7 @@ app.post("/api/create_recipe", async (req, res) => {
         email,
         password,
     } = req.body;
+    console.log(req.body);
     if (
         !title ||
         !description ||
@@ -400,7 +401,7 @@ app.post("/api/create_recipe", async (req, res) => {
             return res.status(500).json({ error: putResponse.error });
         }
         last_recipe_check.response = putJSON;
-        res.json({ message: "Recipe created successfully" });
+        res.json({ message: "Recipe created successfully", id: newRecipe.id });
     } catch (error) {
         console.error("There was a problem with the fetch operation:", error);
         return res
