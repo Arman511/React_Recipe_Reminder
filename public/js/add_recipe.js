@@ -103,7 +103,7 @@ document.getElementById("btn_submit").addEventListener("click", async () => {
             servings: servings,
             prepTime: prepTime,
             cookTime: cookTime,
-            stars: star,
+            star: star,
             ingredients: ingredients,
             steps: steps,
             email: email,

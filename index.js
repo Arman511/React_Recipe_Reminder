@@ -435,7 +435,7 @@ app.post("/api/edit_account", async (req, res) => {
         }
         const authors = response_authors.users;
         const author = authors.find((author) => author.email === email);
-        if (new_email && authors.some(author => author.email === new_email)) {
+        if (new_email && authors.some((author) => author.email === new_email)) {
             return res.status(400).json({ error: "Email already exists" });
         }
         if (!author) {
